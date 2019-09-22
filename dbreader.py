@@ -58,7 +58,7 @@ def db_conn(create_table_sql, filename, delimiter):
 		if match:
 			fname = match.group(1)
 
-		connection = psycopg2.connect(user = "postgres", password = "x", host = "127.0.0.1", port = "5432", database = "postgres")
+		connection = psycopg2.connect(user = "postgres", password = "1234", host = "127.0.0.1", port = "5432", database = "postgres")
 		cursor = connection.cursor()
 		cursor.execute(create_table_sql)
 	
