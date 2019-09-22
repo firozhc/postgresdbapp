@@ -2,7 +2,7 @@
 ## Program Name: db.py
 ## Author: Firoz Hossain Chaudhuri
 ## Date: 05/19/2019
-## Description: This Program will pre-process csv files to load into Postgres SQL Server
+## Description: This Module will pre-process csv files to load into Postgres SQL Server
 ##
 #######################################################################################################
 
@@ -10,7 +10,6 @@
 import csv
 import shutil
 import datetime
-
 
 
 
@@ -43,24 +42,26 @@ def readfile(filename, delim):
 		print("Error in Reading File "+ filename + e)
 
 
-def file_ops(filename, delim):
+def file_ops(filename):
 
-	copy_to_dir = '/tmp'
+	copy_to_dir = '/tmp/'
 	
-	copy_from_dir = '/users/firoz/desktop/' + str(filename)
+	copy_from_dir = '/users/firoz/downloads/' + str(filename)
 
 	try:
 		shutil.copy2(copy_from_dir, copy_to_dir) # target filename is /dst/dir/file.ext
-		print("File Copy was successful for " + filename)
+		print("File"+" "+filename+" was successfully copied to /tmp ..")
 
-		readfile(copy_from_dir, delim)
+		return copy_to_dir
+
+
+		#readfile(copy_from_dir, delim)
 
 	except Exception as e:
 		print("Error in Copy File for "+filename + e)
 
 
-
-
+"""
 
 def main():
 
@@ -68,17 +69,17 @@ def main():
 
 	filename = input()
 
-	print("Please Enter the File Delimiter: ")
+	#print("Please Enter the File Delimiter: ")
 
-	delim = str(input().strip())
+	#delim = str(input().strip())
 
-	print(delim)
+	file_ops(filename)
 
-	file_ops(filename, delim)
 	
-
 
 
 
 if __name__=="__main__":
 	main()
+
+"""

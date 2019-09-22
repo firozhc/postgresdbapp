@@ -12,6 +12,7 @@ import shutil
 import datetime
 import psycopg2
 import re
+import filecopy
 
 
 # This function will read the csv file and extract the header
@@ -19,7 +20,7 @@ def readheader(filename, delim):
 	
 	try:
 
-		if delim == "t":
+		if delim =="t":
 			delim = '\t'
 
 		file = open(filename, 'r')
@@ -45,7 +46,7 @@ def readheader(filename, delim):
 
 
 	except Exception as e:
-		print("Error in Reading File "+ filename + str(e))
+		print("Error in Reading File "+ filename +" "+str(e))
 
 
 def db_conn(create_table_sql, filename, delimiter):
@@ -60,7 +61,7 @@ def db_conn(create_table_sql, filename, delimiter):
 		connection = psycopg2.connect(user = "postgres", password = "x", host = "127.0.0.1", port = "5432", database = "postgres")
 		cursor = connection.cursor()
 		cursor.execute(create_table_sql)
-		connection.commit()
+	
 		print("\nTable "+fname+" Created Successfully!")
 
 		select_sql = "Select * from "+fname+" limit 10"
@@ -72,12 +73,14 @@ def db_conn(create_table_sql, filename, delimiter):
 		print(c)
 		
 
-		copy_sql = "COPY "+ fname+ " FROM '"+ filename+ "' DELIMITER E'"+ delimiter+"'"+ "CSV HEADER QUOTE '\"' ESCAPE '\"' ENCODING 'LATIN1' ;"
+		copy_sql = "COPY "+ fname+ " FROM '"+ filename+ "' DELIMITER E'"+ delimiter+"'"+ "CSV HEADER QUOTE E'\\^' ESCAPE E'\\^' ENCODING 'LATIN1' ;"
 		print('\n'+copy_sql)
 
 		cursor.execute(copy_sql)
 
 
+		connection.commit()
+		
 		select_sql = "Select * from "+fname+" limit 10"
 
 		cursor.execute(select_sql)
@@ -106,7 +109,9 @@ def main():
 
 	delim = str(input().strip())
 
-	tup = readheader(filename, delim)
+	file_name = filecopy.file_ops(filename) + filename
+
+	tup = readheader(file_name, delim)
 
 	print(tup)
 
